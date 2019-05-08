@@ -30,8 +30,8 @@ from fasterai.visualize import get_image_colorizer
 # Check https://docs.runwayapp.ai/#/python-sdk to see a complete list of
 # supported configs. The setup function should return the model ready to be
 # used.
-@runway.setup()
-def setup(opts):
+@runway.setup
+def setup():
     colorizer = get_image_colorizer(artistic=True)
     return colorizer
 
