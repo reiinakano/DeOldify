@@ -27,3 +27,5 @@ test_images/image.png
 test_images/image.jpg
 fasterai/.ipynb_checkpoints/*-checkpoint.py
 tmp*
+
+.idea/
