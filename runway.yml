@@ -17,7 +17,7 @@ framework: pytorch
 # instance if your model doesn't use CUDA or run on a GPU you can set
 # gpu: False.
 spec:
-    cpu: True
+    cpu: False
     gpu: True
 files:
     # All files in the root project directory will be copied to the Docker image
@@ -32,7 +32,7 @@ files:
 build_steps:
     - pip install -r requirements.txt
     - mkdir 'models'
-    - wget wget https://www.dropbox.com/s/zkehq1uwahhbc2o/ColorizeArtistic_gen.pth?dl=0 -O ./models/ColorizeArtistic_gen.pth
+    - wget https://www.dropbox.com/s/zkehq1uwahhbc2o/ColorizeArtistic_gen.pth?dl=0 -O ./models/ColorizeArtistic_gen.pth
     # The if_gpu and if_cpu directives can be used to run build steps
     # conditionally depending on the build environment.
     - if_gpu: echo "Building in a GPU environment..."
