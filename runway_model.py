@@ -21,24 +21,25 @@
 # SOFTWARE.
 
 import runway
-from runway.data_types import number, image
+from runway.data_types import number, image, category
 
-from fasterai.visualize import get_image_colorizer
+from fasterai.visualize import get_image_colorizer, get_video_colorizer
 
-# Setup the model, initialize weights, set the configs of the model, etc.
-# Every model will have a different set of configurations and requirements.
-# Check https://docs.runwayapp.ai/#/python-sdk to see a complete list of
-# supported configs. The setup function should return the model ready to be
-# used.
-@runway.setup
-def setup():
-    colorizer = get_image_colorizer(artistic=True)
+
+@runway.setup(options={"architecture": category(choices=['Artistic', 'Stable', 'Video'], default='Artistic')})
+def setup(opts):
+    architecture = opts['architecture']
+    print('[SETUP] Ran with architecture "{}"'.format(architecture))
+
+    if architecture == 'Artistic':
+        colorizer = get_image_colorizer(artistic=True)
+    elif architecture == 'Stable':
+        colorizer = get_image_colorizer(artistic=False)
+    else:
+        colorizer = get_video_colorizer().vis
     return colorizer
 
 
-# Every model needs to have at least one command. Every command allows to send
-# inputs and process outputs. To see a complete list of supported inputs and
-# outputs data types: https://sdk.runwayml.com/en/latest/data_types.html
 @runway.command(name='generate',
                 inputs={ 'image': image(),
                          'render_factor': number(min=7, max=45, step=1, default=35) },
@@ -57,13 +58,4 @@ def generate(model, args):
 
 
 if __name__ == '__main__':
-    # run the model server using the default network interface and ports,
-    # displayed here for convenience
-    runway.run(host='0.0.0.0', port=8000)
-
-## Now that the model is running, open a new terminal and give it a command to
-## generate an image. It will respond with a base64 encoded URI
-# curl \
-#   -H "content-type: application/json" \
-#   -d '{ "caption": "red" }' \
-#   localhost:8000/generate
+    runway.run(host='0.0.0.0', port=8888)

@@ -34,6 +34,8 @@ build_steps:
     - pip install -r requirements.txt
     - mkdir 'models'
     - wget https://www.dropbox.com/s/zkehq1uwahhbc2o/ColorizeArtistic_gen.pth?dl=0 -O ./models/ColorizeArtistic_gen.pth
+    - wget https://www.dropbox.com/s/336vn9y4qwyg9yz/ColorizeVideo_gen.pth?dl=0 -O ./models/ColorizeVideo_gen.pth
+    - wget https://www.dropbox.com/s/mwjep3vyqk5mkjc/ColorizeStable_gen.pth?dl=0 -O ./models/ColorizeStable_gen.pth
     # The if_gpu and if_cpu directives can be used to run build steps
     # conditionally depending on the build environment.
     - if_gpu: echo "Building in a GPU environment..."
