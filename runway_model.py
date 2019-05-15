@@ -26,7 +26,26 @@ from runway.data_types import number, image, category
 from fasterai.visualize import get_image_colorizer, get_video_colorizer
 
 
-@runway.setup(options={"architecture": category(choices=['Artistic', 'Stable', 'Video'], default='Artistic')})
+architecture_description = "DeOldify model to use.\n" \
+                           "Artistic achieves the highest quality results in image coloration, in terms of " \
+                           "interesting details and vibrance. The most notable drawback however is that it's a bit " \
+                           "of a pain to fiddle around with to get the best results.\n" \
+                           "Stable achieves the best results with landscapes and portraits. Notably, it " \
+                           "produces less 'zombies'- where faces or limbs stay gray rather than being colored " \
+                           "in properly.\n" \
+                           "Video is optimized for smooth, consistent and flicker-free video."
+
+render_factor_description = "The default value of 35 has been carefully chosen and should work -ok- for most " \
+                            "scenarios (but probably won't be the -best-). This determines resolution at which " \
+                            "the color portion of the image is rendered. Lower resolution will render faster, and " \
+                            "colors also tend to look more vibrant. Older and lower quality images in particular" \
+                            " will generally benefit by lowering the render factor. Higher render factors are often " \
+                            "better for higher quality images, but the colors may get slightly washed out."
+
+
+@runway.setup(options={"architecture": category(description=architecture_description,
+                                                choices=['Artistic', 'Stable', 'Video'],
+                                                default='Artistic')})
 def setup(opts):
     architecture = opts['architecture']
     print('[SETUP] Ran with architecture "{}"'.format(architecture))
@@ -41,9 +60,10 @@ def setup(opts):
 
 
 @runway.command(name='generate',
-                inputs={ 'image': image(),
-                         'render_factor': number(min=7, max=45, step=1, default=35) },
-                outputs={ 'image': image() })
+                inputs={ 'image': image(description='Image to colorize'),
+                         'render_factor': number(description=render_factor_description,
+                                                 min=7, max=45, step=1, default=35) },
+                outputs={ 'image': image(description='Colorized image') })
 def generate(model, args):
     render_factor = args['render_factor']
     print('[GENERATE] Ran with render_factor "{}"'.format(render_factor))
